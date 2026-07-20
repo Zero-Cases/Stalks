@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Babylon Test</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+</head>
+
+<body>
+    <canvas id="renderCanvas" style="width:100%; height:100%;"></canvas>
+    <script>
+        const canvas = document.getElementById("renderCanvas");
+        const engine = new BABYLON.Engine(canvas, true);
+        const scene = new BABYLON.Scene(engine);
+
+        async function initXR() {
+            const xr = await scene.createDefaultXRExperienceAsync();
+        }
+        initXR();
+
+        const camera = new BABYLON.ArcRotateCamera(
+            "camera",
+            Math.PI / 2,   // horizontal angle
+            Math.PI / 3,   // vertical angle
+            750,            // distance from center
+            BABYLON.Vector3.Zero(), // what to orbit around
+            scene
+        );
+        camera.attachControl(canvas, true);
+        scene.clearColor = new BABYLON.Color4(1, 1, 1); // background black
+        new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+        const Stk_PointCount = 100;
+        const Frd_PointCount = 50;
+        const Stk_Count = 10;
+        let Stk_incr = 0;
+        let Frd_incr = 0;
+        const Stk_pointsBack = [];
+        const Stk_Mesh_Up = [];
+        const Frd_pointsBack = [];
+        const Frd_Mesh_Up = [];
+        for (let i = 0; i < Stk_Count; i++) {
+            const Stk_pointsOrig = [];
+            const Frd_pointsOrig = [];
+            const offsetX = (Math.random() - 0.5) * 1000;
+            const offsetZ = (Math.random() - 0.5) * 1000;
+            for (let j = 0; j < Stk_PointCount; j++) {
+                Stk_pointsOrig.push(new BABYLON.Vector3(offsetX, j + Math.random(), offsetZ));
+            }
+            for (let k = 0; k < Frd_PointCount; k++) {
+                Frd_pointsOrig.push(new BABYLON.Vector3(+ k / 2, k + Math.random(), 0));
+                Frd_pointsOrig.push(new BABYLON.Vector3(- k / 2, k + Math.random(), 0));
+            }
+            Stk_Mesh_Up.push(Stk_pointsOrig);
+            Frd_Mesh_Up.push(Frd_pointsOrig);
+        }
+
+        const Stk_lineMeshes = [];
+        const Stk_meshBack = [];
+        for (let i = 0; i < Stk_Mesh_Up.length; i++) {
+            const Stk_meshes = BABYLON.MeshBuilder.CreateLines(null, { points: Stk_Mesh_Up[i], updatable: true }, scene);
+            Stk_meshes.color = new BABYLON.Color3(0, 1, 0);
+            Stk_lineMeshes.push(Stk_meshes);
+            Stk_meshBack.push(Stk_lineMeshes[i].getVerticesData("position"));
+        }
+        const Frd_lineMeshes = [];
+        const Frd_meshBack = [];
+        for (let i = 0; i < Frd_Mesh_Up.length; i++) {
+            const Frd_meshes = BABYLON.MeshBuilder.CreateLines(null, { points: Frd_Mesh_Up[i], updatable: true }, scene);
+            Frd_meshes.color = new BABYLON.Color3(1, 1, 0);
+            Frd_lineMeshes.push(Frd_meshes);
+            Frd_meshBack.push(Frd_lineMeshes[i].getVerticesData("position"));
+        }
+
+        engine.runRenderLoop(() => {
+            Stk_incr += 0.05;
+            Frd_incr += 0.05;
+            for (let i = 0; i < Stk_Count; i++) {
+                const Stk_pointsBetween = Stk_meshBack[i];
+                const Frd_pointsBetween = Frd_meshBack[i];
+                for (let j = 0; j < Stk_PointCount; j++) {
+                    const Stk_index = j * 3;
+                    const Stk_ratio = j / Stk_PointCount;
+                    const Stk_bend = Math.sin(Stk_incr) * Math.pow(Stk_ratio, 2);
+                    Stk_pointsBack[Stk_index + 0] = Stk_pointsBetween[Stk_index + 0] + Stk_bend * 40;
+                    Stk_pointsBack[Stk_index + 1] = Stk_pointsBetween[Stk_index + 1] - Math.abs(Stk_bend) * 5;
+                    Stk_pointsBack[Stk_index + 2] = Stk_pointsBetween[Stk_index + 2];
+                }
+                for (let k = 0; k < Frd_PointCount * 2; k++) {
+                    const Frd_index = k * 3;
+                    const Frd_ratio = k / Frd_PointCount;
+                    const Frd_bend = Math.sin(Frd_incr) * Math.pow(Frd_ratio, 2);
+                    Frd_pointsBack[Frd_index + 0] = Stk_pointsBack[297 + 0] + Frd_pointsBetween[Frd_index + 0] + Frd_bend * 10;
+                    Frd_pointsBack[Frd_index + 1] = Stk_pointsBack[297 + 1] + Frd_pointsBetween[Frd_index + 1] - Math.abs(Frd_bend) * 1;
+                    Frd_pointsBack[Frd_index + 2] = Stk_pointsBack[297 + 2] + Frd_pointsBetween[Frd_index + 2];
+                }
+                Stk_lineMeshes[i].updateVerticesData("position", Stk_pointsBack);
+                Frd_lineMeshes[i].updateVerticesData("position", Frd_pointsBack);
+            }
+            scene.render();
+        });
+
+    </script>
+</body>
+
+</html>8
