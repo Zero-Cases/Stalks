@@ -17,7 +17,6 @@
         async function initXR() {
             const xr = await scene.createDefaultXRExperienceAsync();
         }
-        initXR();
 
         const camera = new BABYLON.ArcRotateCamera(
             "camera",
@@ -72,6 +71,7 @@
             Frd_lineMeshes.push(Frd_meshes);
             Frd_meshBack.push(Frd_lineMeshes[i].getVerticesData("position"));
         }
+        initXR();
 
         engine.runRenderLoop(() => {
             Stk_incr += 0.05;
