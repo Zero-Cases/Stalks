@@ -16,7 +16,7 @@
        async function initXR() {
             const xr = await scene.createDefaultXRExperienceAsync();
         }
-        const camera = new BABYLON.ArcRotateCamera(
+        const camera = new BABYLON.WebXRCamera(
             "camera",
             Math.PI / 2,   // horizontal angle
             Math.PI / 3,   // vertical angle
