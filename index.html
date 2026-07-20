@@ -13,7 +13,9 @@
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
-
+       async function initXR() {
+            const xr = await scene.createDefaultXRExperienceAsync();
+        }
         const camera = new BABYLON.ArcRotateCamera(
             "camera",
             Math.PI / 2,   // horizontal angle
@@ -25,9 +27,7 @@
         camera.attachControl(canvas, true);
         scene.clearColor = new BABYLON.Color4(1, 1, 1); // background black
         new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-        async function initXR() {
-            const xr = await scene.createDefaultXRExperienceAsync();
-        }
+ 
         initXR();
         const Stk_PointCount = 100;
         const Frd_PointCount = 50;
