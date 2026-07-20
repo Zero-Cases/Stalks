@@ -15,7 +15,7 @@
         const scene = new BABYLON.Scene(engine);
        async function initXR() {
 const xr = await scene.createDefaultXRExperienceAsync();
-xr.baseExperience.featuresManager.enableFeature(BABYLON.WebXRFeatureName.MOVEMENT);
+xr.baseExperience.featuresManager.enableFeature(BABYLON.WebXRFeatureName.WALKING);
         }
         const camera = new BABYLON.WebXRCamera(
             "camera",
