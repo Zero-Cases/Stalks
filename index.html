@@ -13,12 +13,13 @@
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
-async function initXR() {
-    const xr = await scene.createDefaultXRExperienceAsync();
-}
-                initXR();
 
-        const camera = new BABYLON.WebXRCamera(
+        async function initXR() {
+            const xr = await scene.createDefaultXRExperienceAsync();
+        }
+        initXR();
+
+        const camera = new BABYLON.ArcRotateCamera(
             "camera",
             Math.PI / 2,   // horizontal angle
             Math.PI / 3,   // vertical angle
@@ -29,8 +30,7 @@ async function initXR() {
         camera.attachControl(canvas, true);
         scene.clearColor = new BABYLON.Color4(1, 1, 1); // background black
         new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
- 
-        initXR();
+
         const Stk_PointCount = 100;
         const Frd_PointCount = 50;
         const Stk_Count = 10;
