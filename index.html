@@ -15,9 +15,8 @@
         const scene = new BABYLON.Scene(engine);
 async function initXR() {
     const xr = await scene.createDefaultXRExperienceAsync();
-    xr.baseExperience.featuresManager.enableFeature(BABYLON.WebXRFeatureName.WALKING);
+    xr.baseExperience.featuresManager.enableFeature(BABYLON.WebXRFeatureName.TELEPORTATION);
 }
-
         const camera = new BABYLON.WebXRCamera(
             "camera",
             Math.PI / 2,   // horizontal angle
