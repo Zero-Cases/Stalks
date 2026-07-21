@@ -13,9 +13,9 @@
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
-       
+       let xr;
         async function initXR() {
-             const xr = await scene.createDefaultXRExperienceAsync();
+              xr = await scene.createDefaultXRExperienceAsync();
         }
        initXR();
 
@@ -99,6 +99,13 @@
                 Frd_lineMeshes[i].updateVerticesData("position", Frd_pointsBack);
             }
             scene.render();
+                             if (xr) {
+        const xrCam = xr.input.xrCamera;
+        const input = xr.input.controllers[0].motionController;
+        const axes = input.getComponentOfType("thumbstick").axes;
+        const forward = xrCam.getForwardRay().direction;
+        xrCam.position.addInPlace(forward.scale(axes.y * 0.1));
+    }
         });
 
     </script>
