@@ -98,13 +98,6 @@
                 Frd_lineMeshes[i].updateVerticesData("position", Frd_pointsBack);
             }
             scene.render();
-            if (xr) {
-        const xrCam = xr.input.xrCamera;
-        const input = xr.input.controllers[0].motionController;
-        const axes = input.getComponentOfType("thumbstick").axes;
-        const forward = xrCam.getForwardRay().direction;
-        xrCam.position.addInPlace(forward.scale(axes.y * 0.1));
-    }
         });
 
     </script>
