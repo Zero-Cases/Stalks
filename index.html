@@ -13,9 +13,9 @@
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
         const scene = new BABYLON.Scene(engine);
-
+const xr = 0;
         async function initXR() {
-            const xr = await scene.createDefaultXRExperienceAsync();
+             xr = await scene.createDefaultXRExperienceAsync();
             xr.input.xrCamera.setMovementEnabled(true);
         }
         
