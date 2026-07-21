@@ -18,18 +18,10 @@
             const xr = await scene.createDefaultXRExperienceAsync();
             xr.input.xrCamera.setMovementEnabled(true);
         }
-
-        const camera = new BABYLON.ArcRotateCamera(
-            "camera",
-            Math.PI / 2,   // horizontal angle
-            Math.PI / 3,   // vertical angle
-            750,            // distance from center
-            BABYLON.Vector3.Zero(), // what to orbit around
-            scene
-        );
-        camera.attachControl(canvas, true);
+        
         scene.clearColor = new BABYLON.Color4(1, 1, 1); // background black
         new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+      
         initXR();
 
         const Stk_PointCount = 100;
@@ -100,6 +92,13 @@
                 Frd_lineMeshes[i].updateVerticesData("position", Frd_pointsBack);
             }
             scene.render();
+            if (xr) {
+        const xrCam = xr.input.xrCamera;
+        const input = xr.input.controllers[0].motionController;
+        const axes = input.getComponentOfType("thumbstick").axes;
+        const forward = xrCam.getForwardRay().direction;
+        xrCam.position.addInPlace(forward.scale(axes.y * 0.1));
+    }
         });
 
     </script>
