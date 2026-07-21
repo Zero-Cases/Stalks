@@ -16,7 +16,6 @@
 let xr;
         async function initXR() {
              xr = await scene.createDefaultXRExperienceAsync();
-            xr.input.xrCamera.setMovementEnabled(true);
         }
         
         scene.clearColor = new BABYLON.Color4(1, 1, 1); // background black
